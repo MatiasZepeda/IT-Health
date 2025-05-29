@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSP Readiness Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #205493;
+    }
+    .instructions {
+      text-align: center;
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 2rem;
+    }
+    .question {
+      margin-bottom: 2rem;
+    }
+    .slider-wrapper {
+      position: relative;
+      margin-top: 1rem;
+    }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      color: #666;
+    }
+    input[type=range] {
+      width: 100%;
+      appearance: none;
+      height: 4px;
+      background: #ccc;
+      border-radius: 2px;
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #205493;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+    .range-value {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 0.5rem;
+    }
+    .btn {
+      background-color: #205493;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+      width: 100%;
+    }
+    .btn:hover {
+      background-color: #183a71;
+    }
+    .result {
+      margin-top: 2rem;
+      padding: 1rem;
+      border-left: 4px solid #205493;
+      background: #e7f0fb;
+    }
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin-bottom: 1rem;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Do You Need an MSP?</h1>
+    <h2>Check Your IT Health Here</h2>
+    <p class="instructions">How familiar or aligned do you feel with the following statements? Use the slider to rate from "Strongly disagree" to "Strongly agree".</p>
+    <form id="quizForm">
+      <div class="question">
+        <label>1. Tech problems often pull our team away from their main work</label>
+        <div class="slider-wrapper">
+          <input type="range" name="q1" min="1" max="5" value="3" oninput="showValue(this)">
+          <div class="range-value">3</div>
+          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+      <div class="question">
+        <label>2. Important security updates often get delayed or forgotten</label>
+        <div class="slider-wrapper">
+          <input type="range" name="q2" min="1" max="5" value="3" oninput="showValue(this)">
+          <div class="range-value">3</div>
+          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+      <div class="question">
+        <label>3. Slow internet or VPN issues often stop our team from working</label>
+        <div class="slider-wrapper">
+          <input type="range" name="q3" min="1" max="5" value="3" oninput="showValue(this)">
+          <div class="range-value">3</div>
+          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+      <div class="question">
+        <label>4. We can get back lost files within four hours</label>
+        <div class="slider-wrapper">
+          <input type="range" name="q4" min="1" max="5" value="3" oninput="showValue(this)">
+          <div class="range-value">3</div>
+          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+      <div class="question">
+        <label>5. Most of my files are on my computer and I’d like them in the cloud</label>
+        <div class="slider-wrapper">
+          <input type="range" name="q5" min="1" max="5" value="3" oninput="showValue(this)">
+          <div class="range-value">3</div>
+          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+      <div class="question">
+        <label>6. Our computers and software are always updated and secure</label>
+        <div class="slider-wrapper">
+          <input type="range" name="q6" min="1" max="5" value="3" oninput="showValue(this)">
+          <div class="range-value">3</div>
+          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
+        </div>
+      </div>
+
+      <button type="button" class="btn" onclick="calculateScore()">Check My Score</button>
+    </form>
+    <div id="resultSection" class="result hidden"></div>
+  </div>
+
+  <script>
+    function showValue(slider) {
+      slider.nextElementSibling.textContent = slider.value;
+    }
+
+    function calculateScore() {
+      const form = document.getElementById('quizForm');
+      const sliders = form.querySelectorAll('input[type=range]');
+      let total = 0;
+      sliders.forEach(slider => {
+        let score = parseInt(slider.value);
+        if (slider.name === 'q4' || slider.name === 'q6') {
+          score = 6 - score; // Invert
+        }
+        total += score;
+      });
+
+      const percent = Math.round((total / 30) * 100);
+      let resultText = "";
+      if (percent >= 70) {
+        resultText = `<strong>${percent}%</strong><br>Looks like an MSP could make a big difference for your organization. The right partner can help you stay secure, reduce downtime, and free up your team to focus on what really matters.`;
+      } else if (percent >= 30) {
+        resultText = `<strong>${percent}%</strong><br>You're in a good spot, but there’s room to improve. Exploring MSP support could help cover gaps, boost performance, and give your team extra peace of mind.`;
+      } else {
+        resultText = `<strong>${percent}%</strong><br>You may not need urgent help today, but it’s always smart to stay ahead. Let’s keep your systems healthy and ready for whatever comes next.`;
+      }
+
+      document.getElementById("resultSection").classList.remove("hidden");
+      document.getElementById("resultSection").innerHTML = `
+        <p>${resultText}</p>
+        <p><strong>Want more tailored advice?</strong></p>
+        <label>Select your industry:</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox"> Healthcare</label>
+          <label><input type="checkbox"> Finance</label>
+          <label><input type="checkbox"> Education</label>
+          <label><input type="checkbox"> Manufacturing</label>
+          <label><input type="checkbox"> Nonprofit</label>
+          <label><input type="checkbox"> Professional Services</label>
+          <label><input type="checkbox" id="otherCheckbox" onchange="toggleOtherInput()"> Other</label>
+        </div>
+        <div id="otherIndustryInput" class="hidden">
+          <label>Please specify:</label>
+          <input type="text" style="width:100%; padding:0.5rem; margin-bottom:1rem;">
+        </div>
+        <label>ZIP Code:</label>
+        <input type="text" placeholder="e.g. 53703" style="width:100%; padding:0.5rem; margin-bottom:1rem;">
+        <button class="btn">Let’s Talk – Get in Touch</button>
+      `;
+    }
+
+    function toggleOtherInput() {
+      const input = document.getElementById("otherIndustryInput");
+      const checkbox = document.getElementById("otherCheckbox");
+      input.classList.toggle("hidden", !checkbox.checked);
+    }
+  </script>
+</body>
+</html>
