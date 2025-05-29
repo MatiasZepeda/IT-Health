@@ -86,6 +86,12 @@
       border-left: 4px solid #205493;
       background: #e7f0fb;
     }
+    .result strong.percent {
+      display: block;
+      font-size: 2rem;
+      color: #205493;
+      margin-bottom: 0.5rem;
+    }
     .checkbox-group {
       display: flex;
       flex-wrap: wrap;
@@ -94,6 +100,21 @@
     }
     .hidden {
       display: none;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .form-grid input[type="text"],
+    .form-grid input[type="email"] {
+      width: 100%;
+      padding: 0.5rem;
+    }
+    .full-width {
+      width: 100%;
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -169,23 +190,29 @@
       sliders.forEach(slider => {
         let score = parseInt(slider.value);
         if (slider.name === 'q4' || slider.name === 'q6') {
-          score = 6 - score; // Invert
+          score = 6 - score;
         }
         total += score;
       });
 
       const percent = Math.round((total / 30) * 100);
+      let title = "";
       let resultText = "";
       if (percent >= 70) {
-        resultText = `<strong>${percent}%</strong><br>Looks like an MSP could make a big difference for your organization. The right partner can help you stay secure, reduce downtime, and free up your team to focus on what really matters.`;
+        title = "You're Ready for an MSP";
+        resultText = "Looks like an MSP could make a big difference for your organization. The right partner can help you stay secure, reduce downtime, and free up your team to focus on what really matters.";
       } else if (percent >= 30) {
-        resultText = `<strong>${percent}%</strong><br>You're in a good spot, but there’s room to improve. Exploring MSP support could help cover gaps, boost performance, and give your team extra peace of mind.`;
+        title = "Worth Exploring";
+        resultText = "You're in a good spot, but there’s room to improve. Exploring MSP support could help cover gaps, boost performance, and give your team extra peace of mind.";
       } else {
-        resultText = `<strong>${percent}%</strong><br>You may not need urgent help today, but it’s always smart to stay ahead. Let’s keep your systems healthy and ready for whatever comes next.`;
+        title = "You're Covered (for now)";
+        resultText = "You may not need urgent help today, but it’s always smart to stay ahead. Let’s keep your systems healthy and ready for whatever comes next.";
       }
 
       document.getElementById("resultSection").classList.remove("hidden");
       document.getElementById("resultSection").innerHTML = `
+        <span class="percent">${percent}%</span>
+        <h3>${title}</h3>
         <p>${resultText}</p>
         <p><strong>Want more tailored advice?</strong></p>
         <label>Select your industry:</label>
@@ -202,9 +229,20 @@
           <label>Please specify:</label>
           <input type="text" style="width:100%; padding:0.5rem; margin-bottom:1rem;">
         </div>
-        <label>ZIP Code:</label>
-        <input type="text" placeholder="e.g. 53703" style="width:100%; padding:0.5rem; margin-bottom:1rem;">
-        <button class="btn">Let’s Talk – Get in Touch</button>
+
+        <div class="form-grid">
+          <input type="text" placeholder="First Name" required>
+          <input type="text" placeholder="Last Name" required>
+          <input type="text" placeholder="Company" required>
+          <input type="email" placeholder="Email" required>
+          <input type="text" placeholder="Phone Number">
+          <label style="align-self:center"><input type="checkbox"> I agree to text messages at this number</label>
+        </div>
+
+        <label class="full-width" style="margin-top: 1rem; display:block;">ZIP Code:</label>
+        <input type="text" placeholder="e.g. 53703" class="full-width">
+
+        <button class="btn">Submit</button>
       `;
     }
 
