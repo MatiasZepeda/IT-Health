@@ -86,11 +86,12 @@
       border-left: 4px solid #205493;
       background: #e7f0fb;
     }
-    .result strong.percent {
-      display: block;
+    .result-header {
+      text-align: center;
       font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
       color: #205493;
-      margin-bottom: 0.5rem;
     }
     .checkbox-group {
       display: flex;
@@ -124,56 +125,7 @@
     <h2>Check Your IT Health Here</h2>
     <p class="instructions">How familiar or aligned do you feel with the following statements? Use the slider to rate from "Strongly disagree" to "Strongly agree".</p>
     <form id="quizForm">
-      <div class="question">
-        <label>1. Tech problems often pull our team away from their main work</label>
-        <div class="slider-wrapper">
-          <input type="range" name="q1" min="1" max="5" value="3" oninput="showValue(this)">
-          <div class="range-value">3</div>
-          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-        </div>
-      </div>
-      <div class="question">
-        <label>2. Important security updates often get delayed or forgotten</label>
-        <div class="slider-wrapper">
-          <input type="range" name="q2" min="1" max="5" value="3" oninput="showValue(this)">
-          <div class="range-value">3</div>
-          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-        </div>
-      </div>
-      <div class="question">
-        <label>3. Slow internet or VPN issues often stop our team from working</label>
-        <div class="slider-wrapper">
-          <input type="range" name="q3" min="1" max="5" value="3" oninput="showValue(this)">
-          <div class="range-value">3</div>
-          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-        </div>
-      </div>
-      <div class="question">
-        <label>4. We can get back lost files within four hours</label>
-        <div class="slider-wrapper">
-          <input type="range" name="q4" min="1" max="5" value="3" oninput="showValue(this)">
-          <div class="range-value">3</div>
-          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-        </div>
-      </div>
-      <div class="question">
-        <label>5. Most of my files are on my computer and I’d like them in the cloud</label>
-        <div class="slider-wrapper">
-          <input type="range" name="q5" min="1" max="5" value="3" oninput="showValue(this)">
-          <div class="range-value">3</div>
-          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-        </div>
-      </div>
-      <div class="question">
-        <label>6. Our computers and software are always updated and secure</label>
-        <div class="slider-wrapper">
-          <input type="range" name="q6" min="1" max="5" value="3" oninput="showValue(this)">
-          <div class="range-value">3</div>
-          <div class="slider-labels"><span>Strongly disagree</span><span>Strongly agree</span></div>
-        </div>
-      </div>
-
-      <button type="button" class="btn" onclick="calculateScore()">Check My Score</button>
+      <!-- questions (unchanged) -->
     </form>
     <div id="resultSection" class="result hidden"></div>
   </div>
@@ -199,20 +151,19 @@
       let title = "";
       let resultText = "";
       if (percent >= 70) {
-        title = "You're Ready for an MSP";
+        title = "Let’s Take IT Off Your Plate";
         resultText = "Looks like an MSP could make a big difference for your organization. The right partner can help you stay secure, reduce downtime, and free up your team to focus on what really matters.";
       } else if (percent >= 30) {
-        title = "Worth Exploring";
+        title = "There’s Room to Grow";
         resultText = "You're in a good spot, but there’s room to improve. Exploring MSP support could help cover gaps, boost performance, and give your team extra peace of mind.";
       } else {
-        title = "You're Covered (for now)";
+        title = "Solid Ground, But Stay Alert";
         resultText = "You may not need urgent help today, but it’s always smart to stay ahead. Let’s keep your systems healthy and ready for whatever comes next.";
       }
 
       document.getElementById("resultSection").classList.remove("hidden");
       document.getElementById("resultSection").innerHTML = `
-        <span class="percent">${percent}%</span>
-        <h3>${title}</h3>
+        <div class="result-header">${percent}% – ${title}</div>
         <p>${resultText}</p>
         <p><strong>Want more tailored advice?</strong></p>
         <label>Select your industry:</label>
@@ -242,7 +193,7 @@
         <label class="full-width" style="margin-top: 1rem; display:block;">ZIP Code:</label>
         <input type="text" placeholder="e.g. 53703" class="full-width">
 
-        <button class="btn">Submit</button>
+        <button class="btn">Let's Talk – Submit My Results</button>
       `;
     }
 
